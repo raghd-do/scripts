@@ -2,7 +2,10 @@ from openpyxl import Workbook, load_workbook
 import os
 
 # فتح القاعدة
+# all
 database = load_workbook(filename="القاعدة\قاعدة الفصل الأول - ١٤٤٤هـ.xlsx")
+# some
+# database = load_workbook(filename="القاعدة\قاعدة الفصل الأول - ١٤٤٤هـ.xlsx")
 
 # # ورقة الحفظ
 # hefeth_sheet = database['حفظ']
@@ -125,80 +128,80 @@ database = load_workbook(filename="القاعدة\قاعدة الفصل الأو
 #     print(f"{student} {id} is done")
 
 # الأميات
-# hefeth_sheet = database['تعاهد']
+hefeth_sheet = database['تعاهد']
 
-# for value in hefeth_sheet.iter_rows(min_row=2,
-#                                     max_row=211,
-#                                     min_col=1,
-#                                     max_col=9,
-#                                     values_only=True):
-#     (dar, halagah, teacher, student, id, school, track, level, status) = value
+for value in hefeth_sheet.iter_rows(min_row=2,
+                                    max_row=4,
+                                    min_col=1,
+                                    max_col=9,
+                                    values_only=True):
+    (dar, halagah, teacher, student, id, school, track, level, status) = value
 
-#     # تجواز غير الأميات
-#     if school != "أمية":
-#         continue
-
-#     test_template = load_workbook(
-#         filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
-
-#     # delete unwanted sheets
-#     for i in range(1, 7):
-#         if test_template[str(i)].title != str(track):
-#             test_template.remove(test_template[str(i)])
-
-#     sheet = test_template.active
-#     sheet['C4'] = student
-#     sheet['C5'] = dar
-
-#     if track == 6:
-#         sheet['E5'] = level
-#         sheet['G4'] = id
-#     else:
-#         sheet['F5'] = level
-#         sheet['H4'] = id
-
-#     isExist = os.path.exists(f"أميات\{teacher}\تعاهد")
-
-#     # create the teacher folder if is not exsist
-#     if not isExist:  
-#         os.makedirs(f"أميات\{teacher}\تعاهد")
-
-#     test_template.save(filename=f"أميات\{teacher}\تعاهد\{student}.xlsx")
-
-#     # test_template.save(filename=f"أميات\{teacher}\تعاهد\{student}.xlsx")
-#     print(f"{student} {id} is done")
-
-# ورقة التلاوة
-telawah_sheet = database['منهج التلاوة']
-
-for value in telawah_sheet.iter_rows(min_row=18,
-                                     max_row=23,
-                                     min_col=1,
-                                     max_col=8,
-                                     values_only=True):
-    (dar, halagah, teacher, student, id, school, track, level) = value
+    # تجواز غير الأميات
+    # if school != "أمية":
+    #     continue
 
     test_template = load_workbook(
-        filename="قوالب\استمارات اختبارات منهج التلاوة.xlsx")
-    
+        filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
+
     # delete unwanted sheets
-    for i in range(1, 9):
-        if test_template[str(i)].title != str(level):
+    for i in range(1, 7):
+        if test_template[str(i)].title != str(track):
             test_template.remove(test_template[str(i)])
-    
-    sheet = test_template[str(level)]
-    print(sheet)
+
+    sheet = test_template.active
     sheet['C4'] = student
     sheet['C5'] = dar
-    sheet['G4'] = id
 
-    Exist = os.path.exists(f"استمارات التلاوة\{dar}")
+    if track == 6:
+        sheet['E5'] = level
+        sheet['G4'] = id
+    else:
+        sheet['F5'] = level
+        sheet['H4'] = id
+
+    isExist = os.path.exists(f"أميات\{dar}\تعاهد")
 
     # create the teacher folder if is not exsist
-    if not Exist:  
-        os.makedirs(f"استمارات التلاوة\{dar}")
+    if not isExist:
+        os.makedirs(f"أميات\{dar}\تعاهد")
 
-    test_template.save(filename=f"استمارات التلاوة\{dar}\{student}.xlsx")
+    test_template.save(filename=f"أميات\{dar}\تعاهد\{student}.xlsx")
+
+    # test_template.save(filename=f"أميات\{teacher}\تعاهد\{student}.xlsx")
     print(f"{student} {id} is done")
+
+# ورقة التلاوة
+# telawah_sheet = database['منهج التلاوة']
+
+# for value in telawah_sheet.iter_rows(min_row=18,
+#                                      max_row=23,
+#                                      min_col=1,
+#                                      max_col=8,
+#                                      values_only=True):
+#     (dar, halagah, teacher, student, id, school, track, level) = value
+
+#     test_template = load_workbook(
+#         filename="قوالب\استمارات اختبارات منهج التلاوة.xlsx")
+
+#     # delete unwanted sheets
+#     for i in range(1, 9):
+#         if test_template[str(i)].title != str(level):
+#             test_template.remove(test_template[str(i)])
+
+#     sheet = test_template[str(level)]
+#     print(sheet)
+#     sheet['C4'] = student
+#     sheet['C5'] = dar
+#     sheet['G4'] = id
+
+#     Exist = os.path.exists(f"استمارات التلاوة\{dar}")
+
+#     # create the teacher folder if is not exsist
+#     if not Exist:
+#         os.makedirs(f"استمارات التلاوة\{dar}")
+
+#     test_template.save(filename=f"استمارات التلاوة\{dar}\{student}.xlsx")
+#     print(f"{student} {id} is done")
 
 print('Done :D')
