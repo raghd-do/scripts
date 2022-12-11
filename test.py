@@ -73,7 +73,7 @@ def taahod_G(database, from_row, to_row):
         if school == "أمية":
             continue
 
-        if status == "خاتمة":
+        if status == "خاتمة تعاهد":
             khatemah(dar, student, id, track, level)
             continue
         else:
@@ -187,7 +187,7 @@ def hefeth_M(database, from_row, to_row):
 # الأميات تعاهد
 
 
-def hefeth_M(database, from_row, to_row):
+def taahod_M(database, from_row, to_row):
     hefeth_sheet = database['تعاهد']
 
     for value in hefeth_sheet.iter_rows(min_row=from_row,
@@ -201,36 +201,40 @@ def hefeth_M(database, from_row, to_row):
         if school != "أمية":
             continue
 
-        test_template = load_workbook(
-            filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
-
-        # delete unwanted sheets
-        for i in range(1, 7):
-            if test_template[str(i)].title != str(track):
-                test_template.remove(test_template[str(i)])
-
-        # fill cells
-        sheet = test_template.active
-        sheet['C4'] = student
-        sheet['C5'] = dar
-
-        if track == 6:
-            sheet['E5'] = level
-            sheet['G4'] = id
+        if status == "خاتمة تعاهد":
+            khatemah(dar, student, id, track, level)
+            continue
         else:
-            sheet['F5'] = level
-            sheet['H4'] = id
+            test_template = load_workbook(
+                filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
 
-        # file path creation
-        isExist = os.path.exists(f"أميات\{dar}\{teacher}\تعاهد")
+            # delete unwanted sheets
+            for i in range(1, 7):
+                if test_template[str(i)].title != str(track):
+                    test_template.remove(test_template[str(i)])
 
-        if not isExist:
-            os.makedirs(f"أميات\{dar}\{teacher}\تعاهد")
+            # fill cells
+            sheet = test_template.active
+            sheet['C4'] = student
+            sheet['C5'] = dar
 
-        # save
-        test_template.save(
-            filename=f"أميات\{dar}\{teacher}\تعاهد\{student}.xlsx")
-        print(f"{student} {id} is done - أميات تعاهد")
+            if track == 6:
+                sheet['E5'] = level
+                sheet['G4'] = id
+            else:
+                sheet['F5'] = level
+                sheet['H4'] = id
+
+            # file path creation
+            isExist = os.path.exists(f"أميات\{dar}\{teacher}\تعاهد")
+
+            if not isExist:
+                os.makedirs(f"أميات\{dar}\{teacher}\تعاهد")
+
+            # save
+            test_template.save(
+                filename=f"أميات\{dar}\{teacher}\تعاهد\{student}.xlsx")
+            print(f"{student} {id} is done - أميات تعاهد")
 
 
 # ورقة التلقين
@@ -306,5 +310,11 @@ def telawah(database, from_row, to_row):
         test_template.save(filename=f"استمارات التلاوة\{dar}\{student}.xlsx")
         print(f"{student} {id} is done - تلاوة")
 
+
+hefeth_G(database, 661, 662)
+# hefeth_M(database, 2, 27)
+
+# taahod_G(database, 2, 6)
+# taahod_M(database, 2, 6)
 
 print('Done :D')
