@@ -311,10 +311,10 @@ def telawah(database, from_row, to_row):
         print(f"{student} {id} is done - تلاوة")
 
 
-hefeth_G(database, 661, 662)
-# hefeth_M(database, 2, 27)
+hefeth_G(database, 2, 8)
+hefeth_M(database, 2, 27)
 
-# taahod_G(database, 2, 6)
-# taahod_M(database, 2, 6)
+taahod_G(database, 2, 6)
+taahod_M(database, 2, 6)
 
 print('Done :D')
