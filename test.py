@@ -11,6 +11,12 @@ database = load_workbook(filename="القاعدة\قاعدة الفصل الأو
 def hefeth_G(database):
     hefeth_sheet = database['حفظ']
 
+    if len(list(hefeth_sheet)) < 2:
+        print("less than 2 rows")
+        return
+
+    print("#", len(list(hefeth_sheet.rows)) - 1)
+
     for value in hefeth_sheet.iter_rows(min_row=2,
                                         max_row=len(list(hefeth_sheet.rows)),
                                         min_col=1,
@@ -62,6 +68,12 @@ def hefeth_G(database):
 
 def taahod_G(database):
     taahod_sheet = database['تعاهد']
+
+    if len(list(taahod_sheet)) < 2:
+        print("less than 2 rows")
+        return
+
+    print("#", len(list(taahod_sheet.rows)) - 1)
 
     for value in taahod_sheet.iter_rows(min_row=2,
                                         max_row=len(list(taahod_sheet.rows)),
