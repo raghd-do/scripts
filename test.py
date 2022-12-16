@@ -20,6 +20,7 @@ def hefeth_G(database, from_row, to_row):
 
         # تجواز الأميات
         if school == "أمية":
+            hefeth_M(dar, teacher, student, id, track, level)
             continue
 
         test_template = load_workbook(
@@ -69,12 +70,13 @@ def taahod_G(database, from_row, to_row):
                                         values_only=True):
         (dar, halagah, teacher, student, id, school, track, level, status) = value
 
-        # تجواز الأميات
+        # الأميات
         if school == "أمية":
+            taahod_M(value)
             continue
 
         if status == "خاتمة تعاهد":
-            khatemah(dar, student, id, track, level)
+            khatemah(value)
             continue
         else:
             test_template = load_workbook(
@@ -139,20 +141,49 @@ def khatemah(dar, student, id, track, level):
 # الأميات حفظ
 
 
-def hefeth_M(database, from_row, to_row):
-    hefeth_sheet = database['حفظ']
+def hefeth_M(value):
+    (dar, halagah, teacher, student, id, school, track, level, status) = value
 
-    for value in hefeth_sheet.iter_rows(min_row=from_row,
-                                        max_row=to_row,
-                                        min_col=1,
-                                        max_col=9,
-                                        values_only=True):
-        (dar, halagah, teacher, student, id, school, track, level, status) = value
+    test_template = load_workbook(
+        filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
 
-        # تجواز غير الأميات
-        if school != "أمية":
-            continue
+    # delete unwanted sheets
+    for i in range(1, 7):
+        if test_template[str(i)].title != str(track):
+            test_template.remove(test_template[str(i)])
 
+    # fill cells
+    sheet = test_template.active
+    sheet['C4'] = student
+    sheet['C5'] = dar
+
+    if track == 6:
+        sheet['E5'] = level
+        sheet['G4'] = id
+    else:
+        sheet['F5'] = level
+        sheet['H4'] = id
+
+    # file path creation
+    isExist = os.path.exists(f"أميات\{dar}\{teacher}")
+
+    if not isExist:
+        os.makedirs(f"أميات\{dar}\{teacher}")
+
+    # save
+    test_template.save(filename=f"أميات\{dar}\{teacher}\{student}.xlsx")
+    print(f"{student} {id} is done - أميات حفظ")
+
+
+# الأميات تعاهد
+
+
+def taahod_M(value):
+    (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+    if status == "خاتمة تعاهد":
+        khatemah(dar, student, id, track, level)
+    else:
         test_template = load_workbook(
             filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
 
@@ -174,67 +205,15 @@ def hefeth_M(database, from_row, to_row):
             sheet['H4'] = id
 
         # file path creation
-        isExist = os.path.exists(f"أميات\{dar}\{teacher}")
+        isExist = os.path.exists(f"أميات\{dar}\{teacher}\تعاهد")
 
         if not isExist:
-            os.makedirs(f"أميات\{dar}\{teacher}")
+            os.makedirs(f"أميات\{dar}\{teacher}\تعاهد")
 
         # save
-        test_template.save(filename=f"أميات\{dar}\{teacher}\{student}.xlsx")
-        print(f"{student} {id} is done - أميات حفظ")
-
-
-# الأميات تعاهد
-
-
-def taahod_M(database, from_row, to_row):
-    hefeth_sheet = database['تعاهد']
-
-    for value in hefeth_sheet.iter_rows(min_row=from_row,
-                                        max_row=to_row,
-                                        min_col=1,
-                                        max_col=9,
-                                        values_only=True):
-        (dar, halagah, teacher, student, id, school, track, level, status) = value
-
-        # تجواز غير الأميات
-        if school != "أمية":
-            continue
-
-        if status == "خاتمة تعاهد":
-            khatemah(dar, student, id, track, level)
-            continue
-        else:
-            test_template = load_workbook(
-                filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
-
-            # delete unwanted sheets
-            for i in range(1, 7):
-                if test_template[str(i)].title != str(track):
-                    test_template.remove(test_template[str(i)])
-
-            # fill cells
-            sheet = test_template.active
-            sheet['C4'] = student
-            sheet['C5'] = dar
-
-            if track == 6:
-                sheet['E5'] = level
-                sheet['G4'] = id
-            else:
-                sheet['F5'] = level
-                sheet['H4'] = id
-
-            # file path creation
-            isExist = os.path.exists(f"أميات\{dar}\{teacher}\تعاهد")
-
-            if not isExist:
-                os.makedirs(f"أميات\{dar}\{teacher}\تعاهد")
-
-            # save
-            test_template.save(
-                filename=f"أميات\{dar}\{teacher}\تعاهد\{student}.xlsx")
-            print(f"{student} {id} is done - أميات تعاهد")
+        test_template.save(
+            filename=f"أميات\{dar}\{teacher}\تعاهد\{student}.xlsx")
+        print(f"{student} {id} is done - أميات تعاهد")
 
 
 # ورقة التلقين
