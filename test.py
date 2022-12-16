@@ -8,11 +8,11 @@ database = load_workbook(filename="القاعدة\قاعدة الفصل الأو
 # ورقة الحفظ بنات
 
 
-def hefeth_G(database, from_row, to_row):
+def hefeth_G(database):
     hefeth_sheet = database['حفظ']
 
-    for value in hefeth_sheet.iter_rows(min_row=from_row,
-                                        max_row=to_row,
+    for value in hefeth_sheet.iter_rows(min_row=2,
+                                        max_row=len(list(hefeth_sheet.rows)),
                                         min_col=1,
                                         max_col=9,
                                         values_only=True):
@@ -60,11 +60,11 @@ def hefeth_G(database, from_row, to_row):
 # ورقة التعاهد بنات
 
 
-def taahod_G(database, from_row, to_row):
+def taahod_G(database):
     taahod_sheet = database['تعاهد']
 
-    for value in taahod_sheet.iter_rows(min_row=from_row,
-                                        max_row=to_row,
+    for value in taahod_sheet.iter_rows(min_row=2,
+                                        max_row=len(list(taahod_sheet.rows)),
                                         min_col=1,
                                         max_col=9,
                                         values_only=True):
@@ -219,11 +219,11 @@ def taahod_M(value):
 # ورقة التلقين
 
 
-def talqeen(database, from_row, to_row):
+def talqeen(database):
     talqeen_sheet = database['منهج التلقين']
 
-    for value in talqeen_sheet.iter_rows(min_row=from_row,
-                                         max_row=to_row,
+    for value in talqeen_sheet.iter_rows(min_row=3,
+                                         max_row=len(list(talqeen_sheet.rows)),
                                          min_col=1,
                                          max_col=8,
                                          values_only=True):
@@ -254,11 +254,11 @@ def talqeen(database, from_row, to_row):
 # ورقة التلاوة
 
 
-def telawah(database, from_row, to_row):
+def telawah(database):
     telawah_sheet = database['منهج التلاوة']
 
-    for value in telawah_sheet.iter_rows(min_row=from_row,
-                                         max_row=to_row,
+    for value in telawah_sheet.iter_rows(min_row=3,
+                                         max_row=len(list(telawah_sheet.rows)),
                                          min_col=1,
                                          max_col=8,
                                          values_only=True):
@@ -290,10 +290,10 @@ def telawah(database, from_row, to_row):
         print(f"{student} {id} is done - تلاوة")
 
 
-hefeth_G(database, 2, 8)
-hefeth_M(database, 2, 27)
+# حفظ
+hefeth_G(database)
 
-taahod_G(database, 2, 6)
-taahod_M(database, 2, 6)
+# تعاهد
+taahod_G(database)
 
 print('Done :D')
