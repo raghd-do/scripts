@@ -8,7 +8,7 @@ database = load_workbook(filename="القاعدة\قاعدة الفصل الأو
 # ورقة الحفظ بنات
 
 
-def hefeth_G(database):
+def hefeth(database):
     hefeth_sheet = database['حفظ']
 
     if len(list(hefeth_sheet)) < 2:
@@ -66,7 +66,7 @@ def hefeth_G(database):
 # ورقة التعاهد بنات
 
 
-def taahod_G(database):
+def taahod(database):
     taahod_sheet = database['تعاهد']
 
     if len(list(taahod_sheet)) < 2:
@@ -301,11 +301,101 @@ def telawah(database):
         test_template.save(filename=f"استمارات التلاوة\{dar}\{student}.xlsx")
         print(f"{student} {id} is done - تلاوة")
 
+# make test template for one
+
+
+def make_test_template_hefeth(value):
+    (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+    # تجواز الأميات
+    if school == "أمية":
+        hefeth_M(dar, teacher, student, id, track, level)
+        return
+
+    test_template = load_workbook(
+        filename="قوالب\قالب - استمارات اختبارات المناهج.xlsx")
+
+    # delete unwanted sheets
+    for i in range(1, 7):
+        if test_template[str(i)].title != str(track):
+            if str(track) == "1-ب" and i == 1:
+                continue
+            test_template.remove(test_template[str(i)])
+
+    # fill cells
+    sheet = test_template.active
+    sheet['C4'] = student
+    sheet['C5'] = dar
+
+    if track == 6:
+        sheet['E5'] = level
+        sheet['G4'] = id
+    else:
+        sheet['G4'] = track
+        sheet['G5'] = level
+        sheet['I4'] = id
+
+    # file path creation
+    isExist = os.path.exists(f"حفظ\{dar}")
+
+    if not isExist:
+        os.makedirs(f"حفظ\{dar}")
+
+    # save
+    test_template.save(filename=f"حفظ\{dar}\{student}.xlsx")
+    print(f"{student} {id} is done - حفظ")
+
+
+def make_test_template_taahod(value):
+    (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+    # الأميات
+    if school == "أمية":
+        taahod_M(value)
+        return
+
+    if status == "خاتمة تعاهد":
+        khatemah(value)
+        return
+    else:
+        test_template = load_workbook(
+            filename="قوالب\قالب - استمارات اختبارات المناهج.xlsx")
+
+    # delete unwanted sheets
+    for i in range(1, 7):
+        if test_template[str(i)].title != str(track):
+            if str(track) == "1-ب" and i == 1:
+                continue
+            test_template.remove(test_template[str(i)])
+
+    # fill cells
+    sheet = test_template.active
+    sheet['C4'] = student
+    sheet['C5'] = dar
+
+    if track == 6:
+        sheet['E5'] = level
+        sheet['G4'] = id
+    else:
+        sheet['G4'] = track
+        sheet['G5'] = level
+        sheet['I4'] = id
+
+    # file path creation
+    isExist = os.path.exists(f"حفظ\{dar}\تعاهد")
+
+    if not isExist:
+        os.makedirs(f"حفظ\{dar}\تعاهد")
+
+    # save
+    test_template.save(filename=f"حفظ\{dar}\تعاهد\{student}.xlsx")
+    print(f"{student} {id} is done - تعاهد")
+
 
 # حفظ
-hefeth_G(database)
+hefeth(database)
 
 # تعاهد
-taahod_G(database)
+# taahod(database)
 
 print('Done :D')
