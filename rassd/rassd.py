@@ -1,6 +1,5 @@
 from openpyxl import *
 import os
-import shutil
 
 tests = os.listdir("test_templates")
 database = load_workbook("database\قاعدة الفصل الأول - ١٤٤٤هـ.xlsx")
