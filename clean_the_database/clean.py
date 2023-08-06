@@ -53,7 +53,7 @@ def delete_unwanted_spaces(text):
     return text
 
 
-# def find_exact(database, qaid):
+def find_exact(database, qaid):
     hefeth_sheet = database['حفظ']
     taahod_sheet = database['تعاهد']
     monqatiaah = database['منقطعات']

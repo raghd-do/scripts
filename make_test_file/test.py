@@ -1,8 +1,10 @@
 from openpyxl import Workbook, load_workbook
 import os
+from clean_spaces import *
 
 # فتح القاعدة
-database = load_workbook(filename="القاعدة\قاعدة الفصل الأول - ١٤٤٤هـ.xlsx")
+database = load_workbook(
+    filename="القاعدة/قاعدة الفصل الأول - ١٤٤٤هـ.xlsx")
 
 
 # ورقة الحفظ بنات
@@ -24,9 +26,13 @@ def hefeth(database):
                                         values_only=True):
         (dar, halagah, teacher, student, id, school, track, level, status) = value
 
+        dar = delete_unwanted_spaces(dar)
+        teacher = delete_unwanted_spaces(teacher)
+        student = delete_unwanted_spaces(student)
+
         # تجواز الأميات
         if school == "أمية":
-            hefeth_M(dar, teacher, student, id, track, level)
+            hefeth_M(value)
             continue
 
         test_template = load_workbook(
@@ -41,8 +47,8 @@ def hefeth(database):
 
         # fill cells
         sheet = test_template.active
-        sheet['C4'] = student
-        sheet['C5'] = dar
+        sheet['C4'] = delete_unwanted_spaces(student)
+        sheet['C5'] = delete_unwanted_spaces(dar)
 
         if track == 6:
             sheet['E5'] = level
@@ -81,6 +87,10 @@ def taahod(database):
                                         max_col=9,
                                         values_only=True):
         (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+        dar = delete_unwanted_spaces(dar)
+        teacher = delete_unwanted_spaces(teacher)
+        student = delete_unwanted_spaces(student)
 
         # الأميات
         if school == "أمية":
@@ -124,8 +134,55 @@ def taahod(database):
         test_template.save(filename=f"حفظ\{dar}\تعاهد\{student}.xlsx")
         print(f"{student} {id} is done - تعاهد")
 
+# تعاهد الدورات
+
+
+def taahod_dowrat(database):
+    taahod_sheet = database['تعاهد']
+
+    if len(list(taahod_sheet)) < 2:
+        print("less than 2 rows")
+        return
+
+    print("#", len(list(taahod_sheet.rows)) - 1)
+
+    for value in taahod_sheet.iter_rows(min_row=2,
+                                        max_row=len(list(taahod_sheet.rows)),
+                                        min_col=1,
+                                        max_col=9,
+                                        values_only=True):
+        (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+        # Open test template
+        test_template = load_workbook(
+            filename="قوالب/قالب - استمارة تعاهد للدورات .xlsx")
+
+        # fill cells
+        sheet = test_template.active
+        sheet['C4'] = student
+        sheet['C5'] = dar
+
+        if track == 6:
+            sheet['E5'] = level
+            sheet['G4'] = id
+        else:
+            sheet['G4'] = track
+            sheet['G5'] = level
+            sheet['I4'] = id
+            sheet['I5'] = teacher
+
+        # file path creation
+        isExist = os.path.exists(f"{dar}")
+
+        if not isExist:
+            os.makedirs(f"{dar}")
+
+        # save
+        test_template.save(filename=f"{dar}/{student}.xlsx")
+        print(f"{student} {id} is done - تعاهد")
 
 # خاتمة
+
 
 def khatemah(dar, student, id, track, level):
     test_template = load_workbook(
@@ -155,6 +212,10 @@ def khatemah(dar, student, id, track, level):
 
 def hefeth_M(value):
     (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+    dar = delete_unwanted_spaces(dar)
+    teacher = delete_unwanted_spaces(teacher)
+    student = delete_unwanted_spaces(student)
 
     test_template = load_workbook(
         filename="قوالب\قالب - استمارة اختبار الأمهات والأميات.xlsx")
@@ -192,6 +253,10 @@ def hefeth_M(value):
 
 def taahod_M(value):
     (dar, halagah, teacher, student, id, school, track, level, status) = value
+
+    dar = delete_unwanted_spaces(dar)
+    teacher = delete_unwanted_spaces(teacher)
+    student = delete_unwanted_spaces(student)
 
     if status == "خاتمة تعاهد":
         khatemah(dar, student, id, track, level)
@@ -271,6 +336,7 @@ def telawah(database):
 
     for value in telawah_sheet.iter_rows(min_row=3,
                                          max_row=len(list(telawah_sheet.rows)),
+                                         #  max_row=12,
                                          min_col=1,
                                          max_col=8,
                                          values_only=True):
@@ -286,10 +352,10 @@ def telawah(database):
 
         # fill cells
         sheet = test_template[str(level)]
-        print(sheet)
         sheet['C4'] = student
         sheet['C5'] = dar
         sheet['G4'] = id
+        sheet['G5'] = teacher
 
         # file path ceartion
         isExist = os.path.exists(f"استمارات التلاوة\{dar}")
@@ -391,11 +457,56 @@ def make_test_template_taahod(value):
     test_template.save(filename=f"حفظ\{dar}\تعاهد\{student}.xlsx")
     print(f"{student} {id} is done - تعاهد")
 
+# استمارات اختبار قبول المعهد - اختبار 5 أجزاء
+
+
+def Maahad_Test(database):
+    Maahad_sheet = database['المعهد']
+
+    for value in Maahad_sheet.iter_rows(min_row=2,
+                                        max_row=len(list(Maahad_sheet.rows)),
+                                        min_col=1,
+                                        max_col=3,
+                                        values_only=True):
+        (student, track, chapter) = value
+
+        test_template = load_workbook(
+            filename="قوالب\قالب - استمارات قبول المعهد اختبار 5 أجزاء.xlsx")
+
+        # fill cells
+        sheet = test_template.active
+        sheet['C4'] = student
+        sheet['C5'] = track
+        sheet['D6'] = chapter
+
+        # file path ceartion
+        isExist = os.path.exists(f"استمارات المعهد\{track}")
+
+        if not isExist:
+            os.makedirs(f"استمارات المعهد\{track}")
+
+        # save
+        test_template.save(filename=f"استمارات المعهد\{track}\{student}.xlsx")
+        print(f"{student} is done - المعهد")
 
 # حفظ
-hefeth(database)
+# hefeth(database)
 
 # تعاهد
 # taahod(database)
+
+
+# تعاهد دورات
+# taahod_dowrat(database)
+
+
+# تلاوة
+# telawah(database)
+
+# تلقين
+# talqeen(database)
+
+# المعهد
+Maahad_Test(database)
 
 print('Done :D')
