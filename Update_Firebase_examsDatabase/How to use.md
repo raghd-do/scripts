@@ -15,5 +15,17 @@
 > NOTE: this file will allow you to modify the Firebase database from your local code as an admin
 
 ### Third: uplaud genarated student exams JSON file to Firebase using the `admin privet key` file
-
-> I'm working on cleaning the code :P
+1. on the terminal, dounloud the dependensy library to work in `upluad-to-firebase.py` file like so
+    ```bash
+    pip install firebase_admin
+    ```
+2. open `upluad-to-firebase.py` file and change the `private_key` varible to your firebase credential file path
+    ```python
+    #Write the [File Path] to your firebase credential file
+    private_key = "fir-web-codelab-79cbb-firebase-adminsdk-4ebbq-fc38a1d45d.json"
+    ```
+3. run the `upluad-to-firebase.py` file like so on the terminal
+    ```bash
+    python upluad-to-firebase.py
+    ```
+    > NOTE: remember to `cd` to directory of the file before running the command :)
