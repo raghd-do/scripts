@@ -1,4 +1,4 @@
-# رفع يانات السجل الأكاديمي من قاعدة الإكسل إلى قاعدة Firebase
+# رفع بيانات السجل الأكاديمي من قاعدة الإكسل إلى قاعدة Firebase
 
 ### First: convert excle to json
 1. open `السجل الأكاديمي.xlsx` and insert the data that you want to be uplauded to the Firebase
