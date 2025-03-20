@@ -19,7 +19,7 @@ for test in tests:
     student_grade = sheet['G13'].value
     student_taqdeer = sheet['G14'].value
 
-    print("coping:", student_name, student_id)
+    print("copying:", student_name, student_id)
 
     student = (
         "لآلئ الرمضانية", student_teacher, student_name, student_id, student_track, student_level, "تلاوة", student_grade, student_taqdeer
