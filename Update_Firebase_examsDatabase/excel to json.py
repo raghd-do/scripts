@@ -16,7 +16,7 @@ def excel_to_json(excel_file):
             student = {
                 'serializableId': student_id,
                 'student_info': {
-                    'الإسم': row['اسم الطالبة'],
+                    'الإسم': row['الإسم'],
                     'السجل المدني': student_id,
                     'الفئة': row['الفئة']
                 },
@@ -29,10 +29,9 @@ def excel_to_json(excel_file):
             'المستوى': row['المستوى'],
             'المعدل': row['المعدل'],
             'المنهج': row['المنهج'],
-            'تاريخ الاختبار': {
-                'السنة': row['السنة'],  # يمكنك تعديل السنة والفصل حسب الحاجة
-                'الفصل': row['الفصل']
-            }
+            'السنة': row['السنة'],  # يمكنك تعديل السنة والفصل حسب الحاجة
+            'الفصل': row['الفصل']
+
         }
         students[student_id]['exams'].append(exam)
 

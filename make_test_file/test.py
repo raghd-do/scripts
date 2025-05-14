@@ -17,7 +17,7 @@ def hefeth(database):
         print("less than 2 rows")
         return
 
-    print("#", len(list(hefeth_sheet.rows)) - 1)
+    print("في الحفظ: #", len(list(hefeth_sheet.rows)) - 1)
 
     for value in hefeth_sheet.iter_rows(min_row=2,
                                         max_row=len(list(hefeth_sheet.rows)),
@@ -31,7 +31,7 @@ def hefeth(database):
         student = delete_unwanted_spaces(student)
 
         # تجواز الأميات
-        if school == "أمية":
+        if school == "أميات":
             hefeth_M(value)
             continue
 
@@ -113,6 +113,7 @@ def taahod(database):
 
         # fill cells
         sheet = test_template.active
+        print(student)
         sheet['C4'] = student
         sheet['C5'] = dar
 
@@ -144,7 +145,7 @@ def taahod_dowrat(database):
         print("less than 2 rows")
         return
 
-    print("#", len(list(taahod_sheet.rows)) - 1)
+    print("في تعاهد الدورات: #", len(list(taahod_sheet.rows)) - 1)
 
     for value in taahod_sheet.iter_rows(min_row=2,
                                         max_row=len(list(taahod_sheet.rows)),
@@ -223,6 +224,8 @@ def hefeth_M(value):
     # delete unwanted sheets
     for i in range(1, 7):
         if test_template[str(i)].title != str(track):
+            if str(track) == "1-ب" and i == 1:
+                    continue
             test_template.remove(test_template[str(i)])
 
     # fill cells
@@ -367,6 +370,46 @@ def telawah(database):
         test_template.save(filename=f"استمارات التلاوة\{dar}\{student}.xlsx")
         print(f"{student} {id} is done - تلاوة")
 
+
+# ورقة خاتمات
+
+def katemah(database):
+    sheet = database['خاتمات']
+
+    if len(list(sheet)) < 2:
+        print("less than 2 rows")
+        return
+
+    print("في الخاتمات: #", len(list(sheet.rows)) - 1)
+
+    for value in sheet.iter_rows(min_row=2,
+                                        max_row=len(list(sheet.rows)),
+                                        min_col=1,
+                                        max_col=2,
+                                        values_only=True):
+        (student, id) = value
+
+        test_template = load_workbook(
+            filename="./قوالب/استمارة كامل القرآن (اختبار الختمة).xlsx")
+
+        # Get the names of the first three sheets
+        sheet_names = test_template.sheetnames[:3]
+
+        # fill cells in the first three sheets
+        for sheet_name in sheet_names:
+            sheet = test_template[sheet_name]
+            sheet["C2"] = delete_unwanted_spaces(student)
+
+        # file path creation
+        isExist = os.path.exists(f"خاتمات")
+
+        if not isExist:
+            os.makedirs(f"خاتمات")
+
+        # save
+        test_template.save(filename=f"خاتمات\{student}.xlsx")
+        print(f"{student} {id} is done - خاتمات")
+
 # make test template for one
 
 
@@ -460,7 +503,7 @@ def make_test_template_taahod(value):
 # استمارات اختبار قبول المعهد - اختبار 5 أجزاء
 
 
-def Maahad_Test(database):
+# def Maahad_Test(database):
     Maahad_sheet = database['المعهد']
 
     for value in Maahad_sheet.iter_rows(min_row=2,
@@ -507,6 +550,9 @@ def Maahad_Test(database):
 # talqeen(database)
 
 # المعهد
-Maahad_Test(database)
+# Maahad_Test(database)
+
+# خاتمات
+katemah(database)
 
 print('Done :D')
