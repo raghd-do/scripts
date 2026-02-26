@@ -18,7 +18,7 @@ def excel_to_json(excel_file):
                 'student_info': {
                     'الإسم': row['الإسم'],
                     'السجل المدني': student_id,
-                    'الفئة': row['الفئة']
+                    # 'الفئة': row['الفئة']
                 },
                 'exams': []
             }
@@ -38,7 +38,7 @@ def excel_to_json(excel_file):
     return list(students.values())
 
 # استبدل 'your_file.xlsx' باسم ملف الإكسل الخاص بك
-excel_file = 'database.xlsx'
+excel_file = './database.xlsx'
 json_data = excel_to_json(excel_file)
 
 # تصدير البيانات إلى ملف JSON

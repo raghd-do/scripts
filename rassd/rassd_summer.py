@@ -1,0 +1,41 @@
+from openpyxl import *
+import os
+import itertools
+
+# تحويل مجلد الاستمارات إلى لسته
+tests = os.listdir("test_templates")
+# فتح القاعدة
+database = load_workbook("database/قاعدة الصيفي 46.xlsx")
+
+# فتح استمارة استمارة
+for test in tests:
+    student_test = load_workbook("test_templates/" + test, data_only=True)
+    sheet = student_test.active
+    student_name = sheet["C4"].value
+    student_program = sheet["C5"].value
+    student_track = sheet["G4"].value
+    student_level = sheet["G5"].value
+    student_id = sheet["I4"].value
+    student_teacher = sheet["I5"].value
+    student_grade = sheet['I21'].value
+    student_taqdeer = sheet['I22'].value
+
+    print("copying:", student_name, student_id)
+
+    student = (
+        student_program, "-", student_teacher, student_name, student_id, "-", student_track, student_level,"","", student_grade, student_taqdeer
+    )
+
+    #  فتح الورقات للقاعدة
+    taahod_sheet = database["تعاهد"]
+
+    taahod_sheet.append(student)
+
+    # move to done file
+    isExist = os.path.exists("done")
+    if not isExist:
+        os.makedirs("done")
+    os.rename(f"test_templates\{test}", f"done\{test}")
+
+    print("copying is done :)")
+    database.save(filename="database/قاعدة الصيفي 46.xlsx")

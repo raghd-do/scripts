@@ -162,15 +162,10 @@ def taahod_dowrat(database):
         sheet = test_template.active
         sheet['C4'] = student
         sheet['C5'] = dar
-
-        if track == 6:
-            sheet['E5'] = level
-            sheet['G4'] = id
-        else:
-            sheet['G4'] = track
-            sheet['G5'] = level
-            sheet['I4'] = id
-            sheet['I5'] = teacher
+        sheet['G4'] = track
+        sheet['G5'] = level
+        sheet['I4'] = id
+        sheet['I5'] = teacher
 
         # file path creation
         isExist = os.path.exists(f"{dar}")
@@ -360,7 +355,7 @@ def telawah(database):
         sheet['G4'] = id
         sheet['G5'] = teacher
 
-        # file path ceartion
+        # file path creation
         isExist = os.path.exists(f"استمارات التلاوة\{dar}")
 
         if not isExist:
@@ -410,8 +405,80 @@ def katemah(database):
         test_template.save(filename=f"خاتمات\{student}.xlsx")
         print(f"{student} {id} is done - خاتمات")
 
-# make test template for one
+# اختبار المعهد 5 أجزاء
+def Maahad_Test_5_Ajzaa(database):
+    sheet = database['المعهد']
 
+    if len(list(sheet)) < 2:
+        print("less than 2 rows")
+        return
+
+    print("في المعهد: #", len(list(sheet.rows)) - 1)
+
+    for value in sheet.iter_rows(min_row=2,
+                                        max_row=len(list(sheet.rows)),
+                                        min_col=1,
+                                        max_col=3,
+                                        values_only=True):
+        (student, diploma, Ajzaa) = value
+
+        test_template = load_workbook(
+            filename="./قوالب/قالب - استمارات قبول المعهد اختبار 5 أجزاء.xlsx")
+
+        # fill cells
+        sheet = test_template.active
+        sheet['C4'] = student
+        sheet['C5'] = diploma
+        sheet['D6'] = Ajzaa
+
+        # file path creation
+        isExist = os.path.exists(f"المعهد/{diploma}/اختبار 5 أجزاء")
+
+        if not isExist:
+            os.makedirs(f"المعهد/{diploma}/اختبار 5 أجزاء")
+
+        # save
+        test_template.save(filename=f"المعهد/{diploma}/اختبار 5 أجزاء/{student}.xlsx")
+        print(f"{student} is done - المعهد")
+
+# اختبار المعهد قياس القدرة
+def Maahad_Test_Qudrah(database):
+    sheet = database['المعهد']
+
+    if len(list(sheet)) < 2:
+        print("less than 2 rows")
+        return
+
+    print("في المعهد: #", len(list(sheet.rows)) - 1)
+
+    for value in sheet.iter_rows(min_row=2,
+                                        max_row=len(list(sheet.rows)),
+                                        min_col=1,
+                                        max_col=3,
+                                        values_only=True):
+        (student, diploma, Ajzaa) = value
+
+        test_template = load_workbook(
+            filename="./قوالب/قالب - استمارات قبول المعهد قياس القدرة.xlsx")
+
+        # fill cells
+        sheet = test_template.active
+        sheet['C4'] = student
+        sheet['C5'] = diploma
+        sheet['D6'] = Ajzaa
+
+        # file path creation
+        isExist = os.path.exists(f"المعهد/{diploma}/اختبار قياس القدرة")
+
+        if not isExist:
+            os.makedirs(f"المعهد/{diploma}/اختبار قياس القدرة")
+
+        # save
+        test_template.save(filename=f"المعهد/{diploma}/اختبار قياس القدرة/{student}.xlsx")
+        print(f"{student} is done - المعهد")
+
+
+# make test template for one
 
 def make_test_template_hefeth(value):
     (dar, halagah, teacher, student, id, school, track, level, status) = value
@@ -544,15 +611,16 @@ def make_test_template_taahod(value):
 
 
 # تلاوة
-# telawah(database)
+telawah(database)
 
 # تلقين
 # talqeen(database)
 
 # المعهد
-# Maahad_Test(database)
+# Maahad_Test_5_Ajzaa(database)
+# Maahad_Test_Qudrah(database)
 
 # خاتمات
-katemah(database)
+# katemah(database)
 
 print('Done :D')
